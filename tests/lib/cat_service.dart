@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CatService extends ChangeNotifier {
   List<String> catImages = [];
   List<String> favoriteCatImages = [];
+
+  late SharedPreferences prefs;
 
   CatService() {
     getRandomCatImages();
@@ -27,5 +30,12 @@ class CatService extends ChangeNotifier {
       favoriteCatImages.add(catImage);
     }
     notifyListeners();
+  }
+
+  // 좋아요를 누른 사진들만 반환하는 메서드
+  List<String> getFavoriteCatImages() {
+    return catImages
+        .where((catImage) => favoriteCatImages.contains(catImage))
+        .toList();
   }
 }
