@@ -6,18 +6,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'cat_service.dart';
 import 'home_page.dart';
 
-late SharedPreferences prefs;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  prefs = await SharedPreferences.getInstance();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  List<String> favoriteCatImages =
+      prefs.getStringList('favoriteCatImages') ?? [];
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => CatService(),
+          create: (context) => CatService(favoriteCatImages),
         ),
       ],
       child: MyApp(),

@@ -2,13 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'main.dart';
+
 class CatService extends ChangeNotifier {
   List<String> catImages = [];
-  List<String> favoriteCatImages = [];
+  List<String> favoriteCatImages;
 
-  late SharedPreferences prefs;
-
-  CatService() {
+  CatService(this.favoriteCatImages) {
+    getFavoriteCatImages();
     getRandomCatImages();
   }
 
@@ -23,19 +24,22 @@ class CatService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleFavoriteImage(String catImage) {
+  void toggleFavoriteImage(String catImage) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if (favoriteCatImages.contains(catImage)) {
       favoriteCatImages.remove(catImage);
     } else {
       favoriteCatImages.add(catImage);
     }
+    prefs.setStringList('favoriteCatImages', favoriteCatImages);
     notifyListeners();
   }
 
   // 좋아요를 누른 사진들만 반환하는 메서드
-  List<String> getFavoriteCatImages() {
-    return catImages
-        .where((catImage) => favoriteCatImages.contains(catImage))
-        .toList();
+  void getFavoriteCatImages() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    favoriteCatImages = prefs.getStringList('favoriteCatImages') ?? [];
   }
 }
