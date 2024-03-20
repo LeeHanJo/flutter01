@@ -25,7 +25,7 @@ class CatService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleFavoriteImage(String catImage) async {
+  void toggleFavoriteImage(String catImage) {
     if (favoriteCatImages.contains(catImage)) {
       favoriteCatImages.remove(catImage);
     } else {
