@@ -11,14 +11,11 @@ void main() async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  List<String> favoriteCatImages =
-      prefs.getStringList('favoriteCatImages') ?? [];
-
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => CatService(favoriteCatImages),
+          create: (context) => CatService(prefs),
         ),
       ],
       child: MyApp(),

@@ -5,10 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 
 class CatService extends ChangeNotifier {
+  SharedPreferences prefs;
   List<String> catImages = [];
-  List<String> favoriteCatImages;
+  List<String> favoriteCatImages = [];
 
-  CatService(this.favoriteCatImages) {
+  CatService(this.prefs) {
     getFavoriteCatImages();
     getRandomCatImages();
   }
@@ -25,8 +26,6 @@ class CatService extends ChangeNotifier {
   }
 
   void toggleFavoriteImage(String catImage) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
     if (favoriteCatImages.contains(catImage)) {
       favoriteCatImages.remove(catImage);
     } else {
@@ -37,9 +36,8 @@ class CatService extends ChangeNotifier {
   }
 
   // 좋아요를 누른 사진들만 반환하는 메서드
-  void getFavoriteCatImages() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
+  List<String> getFavoriteCatImages() {
     favoriteCatImages = prefs.getStringList('favoriteCatImages') ?? [];
+    return favoriteCatImages;
   }
 }
